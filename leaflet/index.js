@@ -1,4 +1,13 @@
-let map = L.map('map').setView([39.93472, 116.4336], 20);
+
+// // * Medir tiempos de renderizado de los marcadores en el mapa // //
+let startTime = performance.now();
+
+let map = L.map('map').setView([39.93472, 116.4336], 13);
+
+let endTime = performance.now();
+let diff = endTime - startTime;
+
+console.log("El mapa tardó " + diff + " milisegundos en renderizarse.");
 //L.setLocale("es"); // initialize the map and set its view to our chosen geographical coordinates and a zoom level:
 
 // [latitud, longitud], zoom
@@ -15,23 +24,8 @@ let circle = L.circle([39.9112879,116.3764966], {
     radius: 500 //meters
 }).addTo(map);
 
-// circle.bindPopup("500m around Heng Er Tiao, Xi Cheng Qu");
-
-// let polygon = L.polygon([
-//     [40.007336, 116.273302], // UppLeft
-//     [40.012225, 116.484832], //UppRight
-//     [39.948698, 116.535155], //downLeft
-//     [39.930353, 116.212430] //DownRight
-// ]).addTo(map);
-
-// polygon.bindPopup("I am a polygon.");
 
 let popup = L.popup()
-    .setLatLng([39.924592, 116.212770])
-    .setContent("Jinyuan Bridge (standalone popup)")
-    .openOn(map); // openOn instead of addTo because it handles automatic closing of a previously opened popup when opening a new one.
-
-
 
 // // * Obtener coordenadas de un punto en especifico. // //
 function onMapClick(e) {
@@ -52,37 +46,30 @@ function gettingBounds() {
 }
 
 let rectangle = gettingBounds();
-console.log(rectangle)
+console.log('los bordes son: ', rectangle)
 
 let latA = rectangle._northEast.lat;
 let lonA = rectangle._northEast.lng;
 
+let latB = rectangle._southWest.lat;
+let lonB = rectangle._southWest.lng;
 
 console.log(latA, lonA)
-let neMarker = L.marker([latA,lonA]).addTo(map);
 
-// let cont = rectangle.contains(39.93472, 116.4336);
-// console.log(cont);
 
-//
-
-// // * Agregar marcadores en el mapa // //
-// let marker = L.marker([39.9112879,116.3764966]).addTo(map);
-// marker.bindPopup("<b>Heng Er Tiao, Xi Cheng Qu, Bei Jing Shi, China, 100031</b>.").openPopup(); //openPopup method (for markers only) immediately opens the attached popup.
-
-// let res = rectangle.contains(marker.getLatLng());
-// console.log(res)
+// // * Agregar marcadores en el mapa (mas de uno) // //
+let NEmarker = L.marker([latA, lonA]).addTo(map);
+let SOmarker = L.marker([latB, lonB]).addTo(map);
+let marker = L.marker([39.9112879,116.3764966]).addTo(map);
+marker.bindPopup("<b>Heng Er Tiao, Xi Cheng Qu, Bei Jing Shi, China, 100031</b>.").openPopup(); //openPopup method (for markers only) immediately opens the attached popup.
 
 
 // // * Configurar iconos como marcadores en el mapa  // //
 
 let taxiIcon = L.icon({
     iconUrl: './assets/taxi.png',
-
     iconSize:[50, 65], // size of the icon
-
     iconAnchor:[30, 90], // point of the icon which will correspond to marker's location
-
     popupAnchor:[-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
@@ -94,12 +81,18 @@ console.log('El taxi está en: ', taxiLatLon)
 
 let resTaxi = rectangle.contains(taxi.getLatLng());
 console.log(resTaxi)
-// // * Al hacer click e un marcador en el mapa se haga ZoomIn alrededor del mismo // //
 
-// // * Agregar mas de un marcador en el mapa // //
+// // * Al hacer click e un marcador en el mapa se haga ZoomIn alrededor del mismo // //
+function zoomClick(e) {
+    let coor = e.latlng;
+    console.log(coor)
+    map.setView([coor.lat, coor.lng], 20)
+}
+
+map.on('click', zoomClick);
+
 
 // // * Eliminar marcadores del mapa // //
 
-// // * Medir tiempos de renderizado de los marcadores en el mapa // //
-
 // // * Actualizacion constante del mapa (renderizado de 5 diferentes elementos por pagina) // //
+
