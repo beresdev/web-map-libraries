@@ -1,0 +1,25 @@
+{
+  "name": "ts-leaflet",
+  "version": "1.0.0",
+  "description": "Leaflet project with TypeScript",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx parcel ./index.html --open",
+    "build": "npx parcel build index.html --public-url"
+  },
+  "keywords": [
+    "leaflet",
+    "typescript",
+    "map",
+    "maps"
+  ],
+  "author": "Berenice Hernández <beresdev@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "leaflet": "^1.9.3",
+    "typescript": "5.0"
+  },
+  "devDependencies": {
+    "parcel": "^2.8.3"
+  }
+}
